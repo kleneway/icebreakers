@@ -4,8 +4,10 @@ interface ButtonProps {
   children: React.ReactNode;
   variant?: "primary" | "secondary";
   size?: "sm" | "md" | "lg";
-  onClick?: () => void;
+  onClick?: (e?: React.MouseEvent<HTMLButtonElement>) => void;
   className?: string;
+  disabled?: boolean;
+  type?: "button" | "submit" | "reset";
 }
 
 export const Button: React.FC<ButtonProps> = ({
@@ -14,6 +16,8 @@ export const Button: React.FC<ButtonProps> = ({
   size = "md",
   onClick,
   className = "",
+  disabled = false,
+  type = "button",
 }) => {
   const baseStyles = "rounded-lg font-medium transition-all duration-200";
 
@@ -32,8 +36,12 @@ export const Button: React.FC<ButtonProps> = ({
 
   return (
     <button
-      onClick={onClick}
-      className={`${baseStyles} ${variantStyles[variant]} ${sizeStyles[size]} ${className}`}
+      type={type}
+      onClick={(e) => onClick?.(e)}
+      disabled={disabled}
+      className={`${baseStyles} ${variantStyles[variant]} ${sizeStyles[size]} ${className} ${
+        disabled ? "opacity-50 cursor-not-allowed" : ""
+      }`}
     >
       {children}
     </button>
